@@ -46,10 +46,32 @@ public class ImageServiceImpl implements IImageService {
                         .method(Method.GET)
                         .build());
 
-        //return transformUrl(url);
-       return removeQueryParams(url);
+        return transformUrl(url);
+       //return removeQueryParams(url);
     }
+    private String transformUrl(String originalUrl) {
+        try {
+            // Parsear la URL original para extraer las partes
+            URI originalUri = new URI(originalUrl);
 
+            // Crear una nueva URI con el dominio deseado
+            String newHost = "electrosha20.com.ar";
+            URI transformedUri = new URI(
+                    "https",                     // Esquema (https)
+                    originalUri.getUserInfo(),   // Información del usuario (normalmente null)
+                    newHost,                     // Nuevo host
+                    -1,                          // Puerto (usar puerto predeterminado para https)
+                    originalUri.getPath(),       // Mantener el path original
+                    null,                        // Sin query (si quieres mantenerla, usa originalUri.getQuery())
+                    null                         // Sin fragmento
+            );
+
+            return transformedUri.toString();
+        } catch (Exception e) {
+            throw new RuntimeException("Error transformando la URL", e);
+        }
+    }
+/* 
     private String transformUrl(String originalUrl) {
         try {
             // Parsear la URL original para extraer las partes
@@ -72,7 +94,7 @@ public class ImageServiceImpl implements IImageService {
             throw new RuntimeException("Error transformando la URL", e);
         }
     }
-
+    */
     public static String removeQueryParams(String url) {
         try {
             URI uri = new URI(url);
